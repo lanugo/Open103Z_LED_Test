@@ -1,15 +1,17 @@
 /**
   *************** (C) COPYRIGHT 2015 STMicroelectronics ************************
-  * @file      startup_stm32f101xe.s
+  * @file      startup_stm32f103xe.s
   * @author    MCD Application Team
   * @version   V4.0.1
   * @date      31-July-2015
-  * @brief     STM32F101xE Value Line Devices vector table for Atollic toolchain.
+  * @brief     STM32F103xE Devices vector table for Atollic toolchain.
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
   *                - Set the vector table entries with the exceptions ISR address
   *                - Configure the clock system   
+  *                - Configure external SRAM mounted on STM3210E-EVAL board
+  *                  to be used as data memory (optional, to be enabled by user)
   *                - Branches to main in the C library (which eventually
   *                  calls main()).
   *            After Reset the Cortex-M3 processor is in Thread mode,
@@ -142,7 +144,7 @@ Infinite_Loop:
 
 g_pfnVectors:
 
-  .word _estack
+  .word _eram
   .word Reset_Handler
   .word NMI_Handler
   .word HardFault_Handler
@@ -176,16 +178,16 @@ g_pfnVectors:
   .word DMA1_Channel5_IRQHandler
   .word DMA1_Channel6_IRQHandler
   .word DMA1_Channel7_IRQHandler
-  .word ADC1_IRQHandler
-  .word 0
-  .word 0
-  .word 0
-  .word 0
+  .word ADC1_2_IRQHandler
+  .word USB_HP_CAN1_TX_IRQHandler
+  .word USB_LP_CAN1_RX0_IRQHandler
+  .word CAN1_RX1_IRQHandler
+  .word CAN1_SCE_IRQHandler
   .word EXTI9_5_IRQHandler
-  .word 0
-  .word 0
-  .word 0
-  .word 0
+  .word TIM1_BRK_IRQHandler
+  .word TIM1_UP_IRQHandler
+  .word TIM1_TRG_COM_IRQHandler
+  .word TIM1_CC_IRQHandler
   .word TIM2_IRQHandler
   .word TIM3_IRQHandler
   .word TIM4_IRQHandler
@@ -200,14 +202,14 @@ g_pfnVectors:
   .word USART3_IRQHandler
   .word EXTI15_10_IRQHandler
   .word RTC_Alarm_IRQHandler
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
-  .word 0
+  .word USBWakeUp_IRQHandler
+  .word TIM8_BRK_IRQHandler
+  .word TIM8_UP_IRQHandler
+  .word TIM8_TRG_COM_IRQHandler
+  .word TIM8_CC_IRQHandler
+  .word ADC3_IRQHandler
   .word FSMC_IRQHandler
-  .word 0
+  .word SDIO_IRQHandler
   .word TIM5_IRQHandler
   .word SPI3_IRQHandler
   .word UART4_IRQHandler
@@ -354,11 +356,35 @@ g_pfnVectors:
   .weak DMA1_Channel7_IRQHandler
   .thumb_set DMA1_Channel7_IRQHandler,Default_Handler
 
-  .weak  ADC1_IRQHandler
-  .thumb_set ADC1_IRQHandler,Default_Handler
+  .weak ADC1_2_IRQHandler
+  .thumb_set ADC1_2_IRQHandler,Default_Handler
+
+  .weak USB_HP_CAN1_TX_IRQHandler
+  .thumb_set USB_HP_CAN1_TX_IRQHandler,Default_Handler
+
+  .weak USB_LP_CAN1_RX0_IRQHandler
+  .thumb_set USB_LP_CAN1_RX0_IRQHandler,Default_Handler
+
+  .weak CAN1_RX1_IRQHandler
+  .thumb_set CAN1_RX1_IRQHandler,Default_Handler
+
+  .weak CAN1_SCE_IRQHandler
+  .thumb_set CAN1_SCE_IRQHandler,Default_Handler
 
   .weak EXTI9_5_IRQHandler
   .thumb_set EXTI9_5_IRQHandler,Default_Handler
+
+  .weak TIM1_BRK_IRQHandler
+  .thumb_set TIM1_BRK_IRQHandler,Default_Handler
+
+  .weak TIM1_UP_IRQHandler
+  .thumb_set TIM1_UP_IRQHandler,Default_Handler
+
+  .weak TIM1_TRG_COM_IRQHandler
+  .thumb_set TIM1_TRG_COM_IRQHandler,Default_Handler
+
+  .weak TIM1_CC_IRQHandler
+  .thumb_set TIM1_CC_IRQHandler,Default_Handler
 
   .weak TIM2_IRQHandler
   .thumb_set TIM2_IRQHandler,Default_Handler
@@ -402,8 +428,29 @@ g_pfnVectors:
   .weak RTC_Alarm_IRQHandler
   .thumb_set RTC_Alarm_IRQHandler,Default_Handler
 
+  .weak USBWakeUp_IRQHandler
+  .thumb_set USBWakeUp_IRQHandler,Default_Handler
+
+  .weak TIM8_BRK_IRQHandler
+  .thumb_set TIM8_BRK_IRQHandler,Default_Handler
+
+  .weak TIM8_UP_IRQHandler
+  .thumb_set TIM8_UP_IRQHandler,Default_Handler
+
+  .weak TIM8_TRG_COM_IRQHandler
+  .thumb_set TIM8_TRG_COM_IRQHandler,Default_Handler
+
+  .weak TIM8_CC_IRQHandler
+  .thumb_set TIM8_CC_IRQHandler,Default_Handler
+
+  .weak ADC3_IRQHandler
+  .thumb_set ADC3_IRQHandler,Default_Handler
+
   .weak FSMC_IRQHandler
   .thumb_set FSMC_IRQHandler,Default_Handler
+
+  .weak SDIO_IRQHandler
+  .thumb_set SDIO_IRQHandler,Default_Handler
 
   .weak TIM5_IRQHandler
   .thumb_set TIM5_IRQHandler,Default_Handler
